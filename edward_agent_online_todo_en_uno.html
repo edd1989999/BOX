@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#06264a" />
+  <title>EDWARD · Agente Personal INGEOTECNIA PRO</title>
+  <style>
+    :root{
+      --navy:#06264a;--blue:#0b5cad;--accent:#54a5ff;--sky:#e8f2ff;--bg:#f0f4f8;
+      --surface:#ffffff;--text:#1a2332;--muted:#5a7090;--green:#10b981;--amber:#f59e0b;
+      --red:#ef4444;--purple:#8b5cf6;--line:rgba(6,38,74,.12);--shadow:0 12px 36px rgba(6,38,74,.14);
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+    button,input,textarea,select{font:inherit}
+    button{touch-action:manipulation}
+    .app{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,#f7fbff 0%,#eef4fb 100%)}
+    .topbar{background:linear-gradient(140deg,var(--navy),var(--blue));color:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 5px 20px rgba(6,38,74,.35);z-index:4}
+    .brand{display:flex;align-items:center;gap:11px;min-width:0}.avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#2563eb);display:grid;place-items:center;box-shadow:0 0 0 2px var(--navy),0 0 0 4px rgba(84,165,255,.35);flex:0 0 auto}.avatar b{font-size:21px;color:var(--navy);font-weight:950}.brand-title{font-weight:900;font-size:18px;line-height:1;letter-spacing:-.35px}.brand-sub{color:rgba(232,242,255,.82);font-size:10px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}.clock{text-align:right;flex:0 0 auto}.clock small{display:block;color:rgba(255,255,255,.62);font-size:10px}.clock b{display:block;color:var(--accent);font-size:14px;margin-top:1px}
+    .stats{background:var(--surface);display:flex;gap:7px;overflow-x:auto;padding:7px 12px;border-bottom:1px solid var(--line);scrollbar-width:none}.stats::-webkit-scrollbar{display:none}.chip{display:flex;align-items:center;gap:5px;border-radius:999px;border:1px solid rgba(6,38,74,.1);padding:4px 9px;white-space:nowrap;font-size:11px;background:#fff}.chip b{font-size:11px}.chip span:last-child{color:var(--muted);font-size:10px}
+    .tabs{background:var(--surface);display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--line);z-index:3}.tab{border:0;background:transparent;color:var(--muted);padding:8px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:650;cursor:pointer;border-bottom:2px solid transparent}.tab .ico{font-size:17px}.tab.active{background:rgba(11,92,173,.09);color:var(--blue);border-bottom-color:var(--blue)}
+    .main{flex:1;overflow:hidden;display:flex;flex-direction:column}.view{display:none;height:100%;overflow:auto;padding:14px}.view.active{display:block}.view.chat.active{display:flex;flex-direction:column;padding:0;overflow:hidden}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.section-title{font-weight:850;font-size:15px;color:var(--text)}
+    .btn{border:0;border-radius:10px;padding:9px 14px;background:linear-gradient(135deg,var(--blue),var(--accent));color:#fff;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 4px 14px rgba(11,92,173,.17)}.btn.small{padding:7px 11px;font-size:12px;border-radius:9px}.btn.gray{background:#64748b}.btn.green{background:linear-gradient(135deg,var(--green),#059669)}.btn.red{background:linear-gradient(135deg,var(--red),#dc2626)}.btn.purple{background:linear-gradient(135deg,var(--purple),#7c3aed)}.btn.amber{background:linear-gradient(135deg,var(--amber),#d97706)}.btn.ghost{background:#fff;color:var(--blue);border:1px solid rgba(11,92,173,.25);box-shadow:none}.btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+    .card{background:var(--surface);border:1px solid rgba(6,38,74,.09);border-radius:14px;padding:12px;box-shadow:0 4px 18px rgba(6,38,74,.06);margin-bottom:9px}.card.done{opacity:.56;background:rgba(11,92,173,.05)}.empty{text-align:center;color:var(--muted);padding:34px 20px;font-size:13px}.empty .big{font-size:44px;margin-bottom:8px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}@media(max-width:560px){.grid2,.grid3{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(3,1fr)}}
+    .input,.textarea,.select{width:100%;border:1.5px solid rgba(84,165,255,.4);background:#f8fbff;color:var(--text);border-radius:10px;padding:10px 11px;outline:none}.textarea{min-height:82px;resize:vertical}.input:focus,.textarea:focus,.select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(84,165,255,.16)}.form-grid{display:grid;gap:8px}.form-actions{display:flex;gap:8px;margin-top:3px}.form-actions .btn{flex:1}.hint{font-size:11px;color:var(--muted);line-height:1.45}.danger-note{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.32);border-radius:12px;padding:10px;font-size:12px;color:#805300;line-height:1.45}.ok-note{background:rgba(16,185,129,.11);border:1px solid rgba(16,185,129,.28);border-radius:12px;padding:10px;font-size:12px;color:#065f46;line-height:1.45}.code{font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;background:#0b172a;color:#dbeafe;border-radius:12px;padding:10px;overflow:auto;font-size:11px;line-height:1.5;white-space:pre-wrap}
+    .row-item{display:flex;align-items:flex-start;gap:10px}.check{width:18px;height:18px;accent-color:var(--blue);margin-top:2px;flex:0 0 auto}.item-main{flex:1;min-width:0}.item-title{font-weight:800;font-size:13px;line-height:1.35}.item-title.line{text-decoration:line-through}.meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px;color:var(--muted);font-size:11px}.pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 7px;background:rgba(11,92,173,.1);color:var(--blue);font-weight:800;font-size:10.5px}.del{border:0;background:transparent;color:rgba(239,68,68,.67);font-size:17px;line-height:1;cursor:pointer;padding:2px 5px}.amount{font-weight:950;white-space:nowrap}.amount.plus{color:var(--green)}.amount.minus{color:var(--red)}
+    .chat-log{flex:1;overflow:auto;padding:13px 14px;display:flex;flex-direction:column;gap:9px}.msg{display:flex;gap:8px;align-items:flex-end}.msg.user{flex-direction:row-reverse}.bot-avatar{width:29px;height:29px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;place-items:center;color:var(--accent);font-weight:950;font-size:12px;flex:0 0 auto}.bubble{max-width:84%;padding:10px 13px;border-radius:6px 17px 17px 17px;white-space:pre-wrap;word-break:break-word;line-height:1.55;font-size:13px;box-shadow:0 3px 12px rgba(6,38,74,.09);background:#fff}.user .bubble{border-radius:17px 6px 17px 17px;background:linear-gradient(135deg,var(--blue),var(--accent));color:#fff}.ts{font-size:9px;opacity:.46;margin-top:5px;text-align:left}.user .ts{text-align:right}.quick{background:var(--surface);display:flex;gap:6px;overflow-x:auto;padding:6px 12px 4px;border-top:1px solid rgba(6,38,74,.08);scrollbar-width:none}.quick::-webkit-scrollbar{display:none}.qbtn{white-space:nowrap;border:1px solid rgba(84,165,255,.35);background:var(--sky);color:var(--blue);border-radius:999px;padding:5px 10px;font-size:10.5px;font-weight:800;cursor:pointer}.composer{background:var(--surface);padding:8px 13px 13px;display:flex;gap:8px;align-items:flex-end}.composer textarea{flex:1;min-height:46px;max-height:110px;resize:none}.send{width:46px;height:46px;border-radius:12px;padding:0;display:grid;place-items:center;font-size:20px;flex:0 0 auto}.typing{display:inline-block;animation:pulse 1.15s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
+    .summary-card{padding:12px;text-align:center;border-radius:14px;background:#fff;border:1px solid rgba(6,38,74,.1)}.summary-card .icon{font-size:22px}.summary-card small{display:block;color:var(--muted);font-size:10px;margin-top:2px}.summary-card b{display:block;margin-top:3px;font-size:15px}.summary-card.green b{color:var(--green)}.summary-card.red b{color:var(--red)}.summary-card.blue b{color:var(--blue)}.summary-card.purple b{color:var(--purple)}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(20px);background:#06264a;color:#fff;border-radius:999px;padding:10px 15px;box-shadow:var(--shadow);font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;z-index:20;max-width:92vw}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .modal-back{position:fixed;inset:0;background:rgba(6,38,74,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:12}.modal-back.show{display:flex}.modal{width:min(560px,100%);max-height:90dvh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.32);padding:15px}.modal h3{margin:0 0 10px;font-size:16px}.modal-close{float:right;border:0;background:#eef4fb;color:var(--muted);width:31px;height:31px;border-radius:10px;font-weight:950;cursor:pointer}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="avatar"><b>E</b></div>
+      <div style="min-width:0">
+        <div class="brand-title">EDWARD</div>
+        <div class="brand-sub">Agente personal · INGEOTECNIA PRO · HTML todo en uno</div>
+      </div>
+    </div>
+    <div class="clock"><small id="todayText">--</small><b id="timeText">--:--</b></div>
+  </header>
+
+  <div class="stats" id="statsBar"></div>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="chat"><span class="ico">💬</span>Edward</button>
+    <button class="tab" data-tab="meds"><span class="ico">💊</span>Pastillas</button>
+    <button class="tab" data-tab="tasks"><span class="ico">📋</span>Tareas</button>
+    <button class="tab" data-tab="money"><span class="ico">💰</span>Cobros</button>
+    <button class="tab" data-tab="projects"><span class="ico">🏗️</span>Proyectos</button>
+    <button class="tab" data-tab="settings"><span class="ico">⚙️</span>Ajustes</button>
+  </nav>
+
+  <main class="main">
+    <section id="view-chat" class="view chat active">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="quick" id="quickActions"></div>
+      <div class="composer">
+        <textarea class="textarea" id="chatInput" placeholder="Habla con Edward... Enter envía · Shift+Enter salta línea"></textarea>
+        <button class="btn send" id="sendBtn">▶</button>
+      </div>
+    </section>
+
+    <section id="view-meds" class="view">
+      <div class="section-head"><div class="section-title">💊 Medicamentos del día</div><button class="btn small purple" data-open="med">+ Agregar</button></div>
+      <div id="medsList"></div>
+    </section>
+
+    <section id="view-tasks" class="view">
+      <div class="section-head"><div class="section-title">📋 Tareas, entregas y gestiones</div><button class="btn small" data-open="task">+ Agregar</button></div>
+      <div id="tasksList"></div>
+    </section>
+
+    <section id="view-money" class="view">
+      <div class="section-head"><div class="section-title">💰 Cobros y pagos</div><button class="btn small green" data-open="money">+ Agregar</button></div>
+      <div class="grid2" id="moneySummary"></div>
+      <br />
+      <div id="moneyList"></div>
+    </section>
+
+    <section id="view-projects" class="view">
+      <div class="section-head"><div class="section-title">🏗️ Proyectos técnicos</div><button class="btn small amber" data-open="project">+ Agregar</button></div>
+      <div id="projectsList"></div>
+    </section>
+
+    <section id="view-settings" class="view">
+      <div class="section-title">⚙️ Ajustes del agente online</div>
+      <div class="card">
+        <div class="danger-note"><b>Nota técnica:</b> si pegas una API key en un HTML del navegador, queda almacenada localmente en este dispositivo. Para producción profesional usa un backend/proxy propio y no expongas llaves en cliente.</div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <label><b>Modo de respuesta</b><select class="select" id="apiMode"><option value="local">Local sin API</option><option value="openai">OpenAI / compatible directo</option><option value="anthropic">Claude / Anthropic directo</option><option value="proxy">Proxy propio compatible</option></select></label>
+          <label><b>Endpoint</b><input class="input" id="apiEndpoint" placeholder="https://api.openai.com/v1/chat/completions"></label>
+          <label><b>Modelo</b><input class="input" id="apiModel" placeholder="Modelo editable"></label>
+          <label><b>API key / token</b><input class="input" id="apiKey" type="password" placeholder="Pegar llave solo si aceptas el riesgo local"></label>
+          <label><b>Prompt adicional del sistema</b><textarea class="textarea" id="systemExtra" placeholder="Instrucciones extra para el agente"></textarea></label>
+          <div class="form-actions"><button class="btn" id="saveSettings">Guardar ajustes</button><button class="btn ghost" id="testApi">Probar API</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">📦 Backup / transferencia Android-PC</div>
+        <p class="hint">Exporta todo a JSON para pasarlo por WhatsApp, Drive o cable. Importar reemplaza el estado actual del agente.</p>
+        <div class="form-actions"><button class="btn green" id="exportBtn">Exportar JSON</button><button class="btn amber" id="importBtn">Importar JSON</button></div>
+        <input id="importFile" type="file" accept="application/json,.json" style="display:none">
+      </div>
+      <div class="card">
+        <div class="section-title">🧭 Uso recomendado</div>
+        <div class="code">PC: abrir este archivo en Chrome/Edge.
+Android: abrir con Chrome, Samsung Internet, Acode o navegador local.
+Online con IA: configurar endpoint + API key.
+Modo seguro: usar Local sin API para medicamentos, tareas, cobros y proyectos.</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="modal-back" id="modalBack"><div class="modal" id="modalBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const STORAGE = 'edward:online:todo:v1';
+  const T = {blue:'#0b5cad',green:'#10b981',amber:'#f59e0b',red:'#ef4444',purple:'#8b5cf6'};
+  const SYSTEM = `Eres EDWARD, el asistente personal inteligente y leal de Edd, ingeniero civil y geotécnico, director de INGEOTECNIA PRO en Bucaramanga, Colombia.\n\nRol: gestionar medicamentos, tareas, cobros, agenda y proyectos técnicos. Comunicación: español colombiano, directo, claro, útil para Android. Responde con máximo 5-6 líneas salvo que Edd pida informe extenso. Prioriza urgencias, confirma datos guardados y conecta tareas técnicas con proyectos. Usa alertas: 🔔 urgente, ⚠️ atención, 📌 pendiente. Normativa de referencia cuando aplique: NSR-10, CCP-14, INVIAS.`;
+  const defaultState = {
+    activeTab: 'chat',
+    meds: [],
+    tasks: [],
+    money: [],
+    projects: [
+      {id: uid(), name:'CORVIANDY', status:'Estudio geotécnico v1.0 completo', note:'q_adm=1286 kPa. Pendiente triaxiales CD y monitoreo NF.', priority:'alta', done:false},
+      {id: uid(), name:'Edificio 3 pisos Bucaramanga', status:'Diseño NSR-10 en revisión', note:'Vs=127.2 kN. Revisar coherencia estructural y cimentación.', priority:'media', done:false},
+      {id: uid(), name:'Proyecto Santa Ana', status:'ETABS entregado', note:'Alerta: columnas 25×25 insuficientes para deriva NSR-10 A.6.', priority:'alta', done:false}
+    ],
+    messages: [],
+    settings: {apiMode:'local', apiEndpoint:'', apiModel:'', apiKey:'', systemExtra:''}
+  };
+
+  let state = loadState();
+  let busy = false;
+
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+  function uid(){ return 'id_' + Math.random().toString(36).slice(2) + Date.now().toString(36); }
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(STORAGE);
+      if(!raw) return structuredClone(defaultState);
+      const parsed = JSON.parse(raw);
+      return {...structuredClone(defaultState), ...parsed, settings:{...defaultState.settings, ...(parsed.settings||{})}};
+    }catch(e){ return structuredClone(defaultState); }
+  }
+  function save(){ localStorage.setItem(STORAGE, JSON.stringify(state)); }
+  function moneyFmt(n){ return '$' + Number(n||0).toLocaleString('es-CO') + ' COP'; }
+  function dateFmt(d){ try{return new Date(d).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});}catch{return '--:--'} }
+  function escapeHtml(str=''){ return String(str).replace(/[&<>'"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[m])); }
+  function toast(msg){ const el=$('#toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2200); }
+
+  function tickClock(){
+    const now = new Date();
+    $('#todayText').textContent = now.toLocaleDateString('es-CO',{weekday:'short',day:'numeric',month:'short'});
+    $('#timeText').textContent = now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  }
+
+  function init(){
+    tickClock(); setInterval(tickClock, 30000);
+    if(!state.messages.length){
+      addMsg('assistant', greeting());
+    }
+    bindEvents();
+    renderAll();
+  }
+
+  function greeting(){
+    const h = new Date().getHours();
+    const tramo = h < 12 ? 'buenos días' : h < 19 ? 'buenas tardes' : 'buenas noches';
+    const urg = state.tasks.filter(x=>!x.done && x.priority==='alta').length + state.projects.filter(x=>!x.done && x.priority==='alta').length;
+    const meds = state.meds.filter(x=>!x.taken).length;
+    const money = state.money.filter(x=>!x.paid && x.type==='cobrar').reduce((s,x)=>s+Number(x.amount||0),0);
+    return `¡Edd, ${tramo}! 👋\nEdward está activo en modo HTML todo en uno.\n${urg?`🔔 Tienes ${urg} pendiente(s) de alta prioridad.`:'✅ No hay urgencias críticas registradas.'}\n💊 Medicamentos pendientes: ${meds}. 💰 Por cobrar: ${moneyFmt(money)}.\n¿Qué gestionamos primero?`;
+  }
+
+  function bindEvents(){
+    $('#tabs').addEventListener('click', e=>{
+      const btn = e.target.closest('[data-tab]'); if(!btn) return;
+      setTab(btn.dataset.tab);
+    });
+    document.body.addEventListener('click', e=>{
+      const open = e.target.closest('[data-open]');
+      if(open) openModal(open.dataset.open);
+    });
+    $('#sendBtn').addEventListener('click', sendChat);
+    $('#chatInput').addEventListener('keydown', e=>{
+      if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendChat(); }
+    });
+    $('#saveSettings').addEventListener('click', saveSettings);
+    $('#testApi').addEventListener('click', testApi);
+    $('#exportBtn').addEventListener('click', exportJson);
+    $('#importBtn').addEventListener('click', ()=>$('#importFile').click());
+    $('#importFile').addEventListener('change', importJson);
+    $('#modalBack').addEventListener('click', e=>{ if(e.target.id==='modalBack') closeModal(); });
+  }
+
+  function setTab(id){
+    state.activeTab=id; save();
+    $$('.tab').forEach(x=>x.classList.toggle('active', x.dataset.tab===id));
+    $$('.view').forEach(x=>x.classList.toggle('active', x.id===`view-${id}`));
+  }
+
+  function renderAll(){
+    setTab(state.activeTab || 'chat');
+    renderStats(); renderChat(); renderQuick(); renderMeds(); renderTasks(); renderMoney(); renderProjects(); renderSettings();
+  }
+
+  function renderStats(){
+    const pendMeds = state.meds.filter(x=>!x.taken).length;
+    const urg = state.tasks.filter(x=>!x.done && x.priority==='alta').length + state.projects.filter(x=>!x.done && x.priority==='alta').length;
+    const cobrar = state.money.filter(x=>!x.paid && x.type==='cobrar').reduce((s,x)=>s+Number(x.amount||0),0);
+    const pagar = state.money.filter(x=>!x.paid && x.type==='pagar').reduce((s,x)=>s+Number(x.amount||0),0);
+    const chips = [
+      ['💊',pendMeds,'pendientes',T.purple],['🔴',urg,'urgentes',T.red],['💰',moneyFmt(cobrar).replace(' COP',''),'cobrar',T.green],['💳',moneyFmt(pagar).replace(' COP',''),'pagar',T.amber],['🌐',state.settings.apiMode==='local'?'local':'API','modo',T.blue]
+    ];
+    $('#statsBar').innerHTML = chips.map(c=>`<div class="chip" style="background:${c[3]}12;border-color:${c[3]}33"><span>${c[0]}</span><b style="color:${c[3]}">${c[1]}</b><span>${c[2]}</span></div>`).join('');
+  }
+
+  function renderChat(){
+    $('#chatLog').innerHTML = state.messages.map(m=>`
+      <div class="msg ${m.role==='user'?'user':'assistant'}">
+        ${m.role==='assistant'?'<div class="bot-avatar">E</div>':''}
+        <div class="bubble">${escapeHtml(m.content)}<div class="ts">${dateFmt(m.ts)}</div></div>
+      </div>`).join('') + (busy?`<div class="msg assistant"><div class="bot-avatar">E</div><div class="bubble">Edward está pensando<span class="typing">...</span></div></div>`:'');
+    const log = $('#chatLog'); log.scrollTop = log.scrollHeight;
+  }
+
+  function renderQuick(){
+    const q = [
+      ['💊 Pastillas','¿Cuáles pastillas me faltan tomar hoy?'],
+      ['⚡ Urgente','¿Qué es lo más urgente que debo atender hoy?'],
+      ['💰 Cobros','Resumen de todos mis cobros pendientes con total.'],
+      ['🏗️ Proyectos','Dame el estado actual de mis proyectos técnicos.'],
+      ['📊 Resumen','Dame un resumen ejecutivo de salud, trabajo, dinero y pendientes.'],
+      ['📅 Plan de hoy','Ordéname el plan de trabajo de hoy en prioridad 1, 2 y 3.']
+    ];
+    $('#quickActions').innerHTML = q.map(x=>`<button class="qbtn" data-q="${escapeHtml(x[1])}">${x[0]}</button>`).join('');
+    $$('#quickActions .qbtn').forEach(b=>b.onclick=()=>{ $('#chatInput').value=b.dataset.q; $('#chatInput').focus(); });
+  }
+
+  function itemCard({id,title,meta='',done=false,checkField='done',collection='',amount=''}){
+    return `<div class="card ${done?'done':''}">
+      <div class="row-item">
+        <input class="check" type="checkbox" ${done?'checked':''} data-toggle="${collection}" data-id="${id}" data-field="${checkField}">
+        <div class="item-main"><div class="item-title ${done?'line':''}">${title}</div>${meta?`<div class="meta">${meta}</div>`:''}</div>
+        ${amount}
+        <button class="del" data-del="${collection}" data-id="${id}">×</button>
+      </div>
+    </div>`;
+  }
+
+  function bindListActions(){
+    $$('[data-toggle]').forEach(el=>el.onchange=()=>{
+      const arr=state[el.dataset.toggle]; const it=arr.find(x=>x.id===el.dataset.id); if(it){it[el.dataset.field]=!it[el.dataset.field]; save(); renderAll();}
+    });
+    $$('[data-del]').forEach(el=>el.onclick=()=>{
+      const arrName=el.dataset.del; state[arrName]=state[arrName].filter(x=>x.id!==el.dataset.id); save(); renderAll(); toast('Eliminado');
+    });
+  }
+
+  function renderMeds(){
+    const el=$('#medsList');
+    if(!state.meds.length){ el.innerHTML=`<div class="empty"><div class="big">💊</div><b>Sin medicamentos registrados.</b><br><span>Agrega pastillas, dosis y horarios.</span></div>`; return; }
+    const reset = state.meds.some(x=>x.taken) ? `<button class="btn small ghost" id="resetMeds">🔄 Reiniciar tomas del día</button><br><br>` : '';
+    el.innerHTML = reset + state.meds.map(m=>itemCard({
+      id:m.id, title:escapeHtml(m.name), done:m.taken, checkField:'taken', collection:'meds',
+      meta:`${m.dose?`<span>${escapeHtml(m.dose)}</span>`:''}${m.time?`<span>⏰ ${escapeHtml(m.time)}</span>`:''}${m.taken?'<span style="color:var(--green);font-weight:800">✓ Tomado</span>':''}`
+    })).join('');
+    const resetBtn=$('#resetMeds'); if(resetBtn) resetBtn.onclick=()=>{state.meds.forEach(x=>x.taken=false); save(); renderAll();};
+    bindListActions();
+  }
+
+  function prioLabel(p){ return p==='alta'?'🔴 Alta':p==='baja'?'🟢 Baja':'🟡 Media'; }
+  function prioColor(p){ return p==='alta'?T.red:p==='baja'?T.green:T.amber; }
+
+  function renderTasks(){
+    const el=$('#tasksList');
+    if(!state.tasks.length){ el.innerHTML=`<div class="empty"><div class="big">📋</div><b>Sin tareas registradas.</b><br><span>Agrega entregas, deadlines y gestiones.</span></div>`; return; }
+    const sorted=[...state.tasks].sort((a,b)=> (a.done-b.done) || ({alta:0,media:1,baja:2}[a.priority] - {alta:0,media:1,baja:2}[b.priority]));
+    el.innerHTML=sorted.map(t=>itemCard({
+      id:t.id, title:escapeHtml(t.title), done:t.done, collection:'tasks',
+      meta:`${t.project?`<span class="pill">🏗️ ${escapeHtml(t.project)}</span>`:''}${t.deadline?`<span>📅 ${escapeHtml(t.deadline)}</span>`:''}<span style="color:${prioColor(t.priority)};font-weight:850">${prioLabel(t.priority)}</span>`
+    })).join('');
+    bindListActions();
+  }
+
+  function renderMoney(){
+    const cobrar = state.money.filter(x=>!x.paid && x.type==='cobrar').reduce((s,x)=>s+Number(x.amount||0),0);
+    const pagar = state.money.filter(x=>!x.paid && x.type==='pagar').reduce((s,x)=>s+Number(x.amount||0),0);
+    $('#moneySummary').innerHTML = `<div class="summary-card green"><div class="icon">📥</div><small>Por cobrar</small><b>${moneyFmt(cobrar)}</b></div><div class="summary-card red"><div class="icon">📤</div><small>Por pagar</small><b>${moneyFmt(pagar)}</b></div>`;
+    const el=$('#moneyList');
+    if(!state.money.length){ el.innerHTML=`<div class="empty"><div class="big">💰</div><b>Sin cobros registrados.</b><br><span>Registra honorarios, facturas y pagos pendientes.</span></div>`; return; }
+    const sorted=[...state.money].sort((a,b)=> (a.paid-b.paid) || (a.type==='cobrar'?-1:1));
+    el.innerHTML=sorted.map(m=>itemCard({
+      id:m.id, title:escapeHtml(m.concept), done:m.paid, checkField:'paid', collection:'money',
+      meta:`${m.person?`<span>👤 ${escapeHtml(m.person)}</span>`:''}${m.dueDate?`<span>📅 ${escapeHtml(m.dueDate)}</span>`:''}${m.paid?'<span style="color:var(--green);font-weight:800">✓ Saldado</span>':''}`,
+      amount:`<div class="amount ${m.type==='cobrar'?'plus':'minus'}">${m.type==='cobrar'?'+':'-'}${moneyFmt(m.amount).replace(' COP','')}</div>`
+    })).join('');
+    bindListActions();
+  }
+
+  function renderProjects(){
+    const el=$('#projectsList');
+    if(!state.projects.length){ el.innerHTML=`<div class="empty"><div class="big">🏗️</div><b>Sin proyectos registrados.</b><br><span>Agrega proyectos de ingeniería y estado técnico.</span></div>`; return; }
+    const sorted=[...state.projects].sort((a,b)=> (a.done-b.done) || ({alta:0,media:1,baja:2}[a.priority] - {alta:0,media:1,baja:2}[b.priority]));
+    el.innerHTML=sorted.map(p=>itemCard({
+      id:p.id, title:escapeHtml(p.name), done:p.done, collection:'projects',
+      meta:`<span class="pill">${escapeHtml(p.status||'En seguimiento')}</span>${p.note?`<span>${escapeHtml(p.note)}</span>`:''}<span style="color:${prioColor(p.priority)};font-weight:850">${prioLabel(p.priority)}</span>`
+    })).join('');
+    bindListActions();
+  }
+
+  function renderSettings(){
+    const s=state.settings;
+    $('#apiMode').value=s.apiMode||'local'; $('#apiEndpoint').value=s.apiEndpoint||''; $('#apiModel').value=s.apiModel||''; $('#apiKey').value=s.apiKey||''; $('#systemExtra').value=s.systemExtra||'';
+  }
+
+  function addMsg(role, content){ state.messages.push({role,content,ts:new Date().toISOString()}); save(); renderChat(); }
+
+  async function sendChat(){
+    const input=$('#chatInput'); const text=input.value.trim(); if(!text || busy) return;
+    input.value=''; addMsg('user', text); busy=true; renderChat();
+    try{
+      const reply = await buildReply(text);
+      addMsg('assistant', reply);
+    }catch(e){
+      addMsg('assistant', `⚠️ Falló la conexión/API. Respuesta local:\n${localReply(text)}\n\nDetalle: ${e.message || e}`);
+    }finally{ busy=false; save(); renderAll(); }
+  }
+
+  async function buildReply(text){
+    const auto = tryLocalCommand(text);
+    if(auto) return auto;
+    if(state.settings.apiMode && state.settings.apiMode!=='local') return await callApi(text);
+    return localReply(text);
+  }
+
+  function contextPack(){
+    return {fecha:new Date().toLocaleString('es-CO'), medicamentos:state.meds, tareas:state.tasks, cobros_pagos:state.money, proyectos:state.projects};
+  }
+
+  function tryLocalCommand(text){
+    const t=text.toLowerCase();
+    if(/^(guardar|agregar|crear)\s+medicamento|^medicamento:/i.test(text)) return null;
+    if(/^(guardar|agregar|crear)\s+tarea|^tarea:/i.test(text)) return null;
+    return '';
+  }
+
+  function localReply(text){
+    const t=text.toLowerCase();
+    const meds=state.meds.filter(x=>!x.taken);
+    const tasks=state.tasks.filter(x=>!x.done).sort((a,b)=>({alta:0,media:1,baja:2}[a.priority]-{alta:0,media:1,baja:2}[b.priority]));
+    const projects=state.projects.filter(x=>!x.done).sort((a,b)=>({alta:0,media:1,baja:2}[a.priority]-{alta:0,media:1,baja:2}[b.priority]));
+    const cobrar=state.money.filter(x=>!x.paid && x.type==='cobrar');
+    const pagar=state.money.filter(x=>!x.paid && x.type==='pagar');
+    if(t.includes('pastilla') || t.includes('medicamento')) return meds.length ? `💊 Pendientes hoy:\n${meds.map(x=>`• ${x.name}${x.dose?` — ${x.dose}`:''}${x.time?` · ${x.time}`:''}`).join('\n')}\n\nMarca cada una cuando la tomes.` : '✅ No tienes medicamentos pendientes registrados.';
+    if(t.includes('cobro') || t.includes('cobrar') || t.includes('dinero')) return `💰 Resumen financiero:\n• Por cobrar: ${moneyFmt(cobrar.reduce((s,x)=>s+Number(x.amount||0),0))}\n${cobrar.slice(0,6).map(x=>`  - ${x.concept}: ${moneyFmt(x.amount)}${x.person?` · ${x.person}`:''}`).join('\n') || '  - Sin cobros pendientes'}\n• Por pagar: ${moneyFmt(pagar.reduce((s,x)=>s+Number(x.amount||0),0))}`;
+    if(t.includes('proyecto')) return projects.length ? `🏗️ Estado de proyectos:\n${projects.map(x=>`• ${x.name}: ${x.status || 'En seguimiento'}${x.priority==='alta'?' 🔴':''}${x.note?`\n  ${x.note}`:''}`).join('\n')}\n\nPrioridad: atiende primero los marcados en alta.` : '✅ No hay proyectos pendientes activos.';
+    if(t.includes('urgente') || t.includes('primero') || t.includes('plan')){
+      const top=[...tasks.map(x=>({type:'tarea',...x})),...projects.map(x=>({type:'proyecto',title:x.name,project:x.name,priority:x.priority,note:x.note,status:x.status}))].filter(x=>x.priority==='alta').slice(0,5);
+      return top.length ? `🔔 Prioridad inmediata:\n${top.map((x,i)=>`${i+1}. ${x.type==='proyecto'?'🏗️':'📋'} ${x.title || x.name}${x.deadline?` · vence ${x.deadline}`:''}`).join('\n')}\n\nLuego revisa pendientes de prioridad media.` : `✅ No hay urgencias altas. Plan recomendado:\n1. Revisar cobros pendientes.\n2. Avanzar la tarea técnica más próxima a vencer.\n3. Cerrar un pendiente menor para liberar carga.`;
+    }
+    return `Edd, estoy en modo local. Puedo gestionar medicamentos, tareas, cobros y proyectos.\n\nEstado rápido:\n• 💊 Medicamentos pendientes: ${meds.length}\n• 🔴 Tareas/proyectos alta prioridad: ${tasks.filter(x=>x.priority==='alta').length + projects.filter(x=>x.priority==='alta').length}\n• 💰 Por cobrar: ${moneyFmt(cobrar.reduce((s,x)=>s+Number(x.amount||0),0))}\n\nPara IA online, configura API en Ajustes.`;
+  }
+
+  async function callApi(userText){
+    const s=state.settings;
+    if(!s.apiKey && s.apiMode!=='proxy') throw new Error('No hay API key configurada.');
+    const hist = state.messages.filter(m=>['user','assistant'].includes(m.role)).slice(-12).map(m=>({role:m.role, content:m.content}));
+    const system = SYSTEM + (s.systemExtra ? '\n\n' + s.systemExtra : '') + '\n\nCONTEXTO ACTUAL JSON:\n' + JSON.stringify(contextPack()).slice(0,12000);
+    if(s.apiMode==='anthropic'){
+      const endpoint = s.apiEndpoint || 'https://api.anthropic.com/v1/messages';
+      const model = s.apiModel || 'claude-sonnet';
+      const res = await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','x-api-key':s.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model,max_tokens:1200,system,messages:hist})});
+      const data=await res.json(); if(!res.ok) throw new Error(data.error?.message || res.statusText);
+      return data.content?.[0]?.text || '(sin respuesta)';
+    }
+    const endpoint = s.apiEndpoint || 'https://api.openai.com/v1/chat/completions';
+    const model = s.apiModel || 'gpt-4.1-mini';
+    const headers = {'content-type':'application/json'};
+    if(s.apiMode!=='proxy') headers.authorization = 'Bearer ' + s.apiKey;
+    else if(s.apiKey) headers.authorization = 'Bearer ' + s.apiKey;
+    const res = await fetch(endpoint,{method:'POST',headers,body:JSON.stringify({model,messages:[{role:'system',content:system},...hist],temperature:.25,max_tokens:1200})});
+    const data=await res.json(); if(!res.ok) throw new Error(data.error?.message || res.statusText);
+    return data.choices?.[0]?.message?.content || data.message || '(sin respuesta)';
+  }
+
+  function saveSettings(){
+    state.settings={apiMode:$('#apiMode').value,apiEndpoint:$('#apiEndpoint').value.trim(),apiModel:$('#apiModel').value.trim(),apiKey:$('#apiKey').value.trim(),systemExtra:$('#systemExtra').value.trim()};
+    save(); renderAll(); toast('Ajustes guardados');
+  }
+  async function testApi(){
+    saveSettings(); busy=true; renderChat();
+    try{ const r=await callApi('Prueba breve: responde solo "API conectada".'); toast('API conectada'); addMsg('assistant','✅ Prueba API: '+r); }
+    catch(e){ toast('Falló la API'); addMsg('assistant','⚠️ Prueba API fallida: '+(e.message||e)); }
+    finally{ busy=false; renderAll(); }
+  }
+
+  function openModal(type){
+    const box=$('#modalBox');
+    const close=`<button class="modal-close" onclick="window.__edwardCloseModal()">×</button>`;
+    if(type==='med') box.innerHTML=close+`<h3>💊 Nuevo medicamento</h3><div class="form-grid"><input class="input" id="f_name" placeholder="Nombre *"><input class="input" id="f_dose" placeholder="Dosis, ej: 500 mg / 1 tableta"><input class="input" id="f_time" type="time"><div class="form-actions"><button class="btn purple" onclick="window.__edwardSaveModal('med')">Guardar</button><button class="btn gray" onclick="window.__edwardCloseModal()">Cancelar</button></div></div>`;
+    if(type==='task') box.innerHTML=close+`<h3>📋 Nueva tarea</h3><div class="form-grid"><input class="input" id="f_title" placeholder="Título *"><input class="input" id="f_project" placeholder="Proyecto"><input class="input" id="f_deadline" type="date"><select class="select" id="f_priority"><option value="alta">🔴 Alta</option><option value="media" selected>🟡 Media</option><option value="baja">🟢 Baja</option></select><div class="form-actions"><button class="btn" onclick="window.__edwardSaveModal('task')">Guardar</button><button class="btn gray" onclick="window.__edwardCloseModal()">Cancelar</button></div></div>`;
+    if(type==='money') box.innerHTML=close+`<h3>💰 Nuevo cobro / pago</h3><div class="form-grid"><select class="select" id="f_type"><option value="cobrar">💰 Cobrar</option><option value="pagar">💳 Pagar</option></select><input class="input" id="f_concept" placeholder="Concepto *"><input class="input" id="f_amount" type="number" placeholder="Monto COP"><input class="input" id="f_person" placeholder="Persona / cliente / empresa"><input class="input" id="f_due" type="date"><div class="form-actions"><button class="btn green" onclick="window.__edwardSaveModal('money')">Guardar</button><button class="btn gray" onclick="window.__edwardCloseModal()">Cancelar</button></div></div>`;
+    if(type==='project') box.innerHTML=close+`<h3>🏗️ Nuevo proyecto</h3><div class="form-grid"><input class="input" id="f_name" placeholder="Nombre del proyecto *"><input class="input" id="f_status" placeholder="Estado técnico"><textarea class="textarea" id="f_note" placeholder="Nota, alerta, parámetro clave"></textarea><select class="select" id="f_priority"><option value="alta">🔴 Alta</option><option value="media" selected>🟡 Media</option><option value="baja">🟢 Baja</option></select><div class="form-actions"><button class="btn amber" onclick="window.__edwardSaveModal('project')">Guardar</button><button class="btn gray" onclick="window.__edwardCloseModal()">Cancelar</button></div></div>`;
+    $('#modalBack').classList.add('show');
+  }
+  window.__edwardCloseModal = closeModal;
+  function closeModal(){ $('#modalBack').classList.remove('show'); $('#modalBox').innerHTML=''; }
+  window.__edwardSaveModal = function(type){
+    if(type==='med'){
+      const name=$('#f_name').value.trim(); if(!name) return toast('Falta nombre');
+      const it={id:uid(),name,dose:$('#f_dose').value.trim(),time:$('#f_time').value,taken:false}; state.meds.push(it); addMsg('assistant',`✅ Guardé medicamento: ${it.name}${it.dose?` — ${it.dose}`:''}${it.time?` a las ${it.time}`:''}.`);
+    }
+    if(type==='task'){
+      const title=$('#f_title').value.trim(); if(!title) return toast('Falta título');
+      const it={id:uid(),title,project:$('#f_project').value.trim(),deadline:$('#f_deadline').value,priority:$('#f_priority').value,done:false}; state.tasks.push(it); addMsg('assistant',`✅ Guardé tarea: ${it.title}${it.project?` [${it.project}]`:''}${it.priority==='alta'?' 🔴 Prioridad alta':''}.`);
+    }
+    if(type==='money'){
+      const concept=$('#f_concept').value.trim(); if(!concept) return toast('Falta concepto');
+      const it={id:uid(),type:$('#f_type').value,concept,amount:Number($('#f_amount').value||0),person:$('#f_person').value.trim(),dueDate:$('#f_due').value,paid:false}; state.money.push(it); addMsg('assistant',`✅ Registré ${it.type==='cobrar'?'cobro':'pago'}: ${it.concept} — ${moneyFmt(it.amount)}${it.person?` con ${it.person}`:''}.`);
+    }
+    if(type==='project'){
+      const name=$('#f_name').value.trim(); if(!name) return toast('Falta nombre');
+      const it={id:uid(),name,status:$('#f_status').value.trim(),note:$('#f_note').value.trim(),priority:$('#f_priority').value,done:false}; state.projects.push(it); addMsg('assistant',`✅ Guardé proyecto: ${it.name}${it.priority==='alta'?' 🔴 Alta prioridad':''}.`);
+    }
+    save(); closeModal(); renderAll(); toast('Guardado');
+  };
+
+  function exportJson(){
+    const blob = new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='edward_agente_backup_'+new Date().toISOString().slice(0,10)+'.json'; a.click(); URL.revokeObjectURL(a.href); toast('Backup exportado');
+  }
+  async function importJson(e){
+    const file=e.target.files?.[0]; if(!file) return;
+    try{
+      const txt=await file.text(); const data=JSON.parse(txt);
+      state={...structuredClone(defaultState),...data,settings:{...defaultState.settings,...(data.settings||{})}}; save(); renderAll(); toast('Backup importado'); addMsg('assistant','✅ Importé el backup JSON correctamente.');
+    }catch(err){ toast('JSON inválido'); }
+    e.target.value='';
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
